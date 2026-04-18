@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacker Habit Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="background-glow"></div>
+  <div class="app-shell">
+    <header class="app-header card">
+      <div>
+        <p class="eyebrow">Daily Progress Engine</p>
+        <h1>Hacker Habit Tracker</h1>
+        <p class="muted">Build consistency with streaks, weekly goals, and clean tracking.</p>
+      </div>
+      <div class="header-actions">
+        <button id="themeToggle" class="btn btn-ghost" type="button">Toggle Theme</button>
+        <button id="exportBtn" class="btn btn-secondary" type="button">Export</button>
+        <label class="btn btn-secondary import-label">
+          Import
+          <input id="importInput" type="file" accept=".json" hidden>
+        </label>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+      <article class="card stat-card">
+        <p class="stat-label">Total Habits</p>
+        <p id="totalHabits" class="stat-value">0</p>
+      </article>
+      <article class="card stat-card">
+        <p class="stat-label">Completed Today</p>
+        <p id="doneToday" class="stat-value">0</p>
+      </article>
+      <article class="card stat-card">
+        <p class="stat-label">Best Streak</p>
+        <p id="bestStreak" class="stat-value">0</p>
+      </article>
+      <article class="card stat-card">
+        <p class="stat-label">Completion Rate</p>
+        <p id="completionRate" class="stat-value">0%</p>
+      </article>
+    </section>
+
+    <section class="card controls">
+      <form id="habitForm" class="habit-form">
+        <div class="field">
+          <label for="habitName">Habit Name</label>
+          <input id="habitName" name="habitName" type="text" maxlength="60" placeholder="Read for 30 minutes" required>
+        </div>
+        <div class="field">
+          <label for="habitFrequency">Target Days / Week</label>
+          <input id="habitFrequency" name="habitFrequency" type="number" min="1" max="7" value="7" required>
+        </div>
+        <div class="field">
+          <label for="habitCategory">Category</label>
+          <select id="habitCategory" name="habitCategory">
+            <option value="Health">Health</option>
+            <option value="Learning">Learning</option>
+            <option value="Productivity">Productivity</option>
+            <option value="Mindfulness">Mindfulness</option>
+            <option value="Custom">Custom</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="customCategory">Custom Category</label>
+          <input id="customCategory" name="customCategory" type="text" maxlength="20" placeholder="Fitness">
+        </div>
+        <div class="field">
+          <label for="habitColor">Accent Color</label>
+          <input id="habitColor" name="habitColor" type="color" value="#7c5cff">
+        </div>
+        <button class="btn btn-primary" type="submit">Add Habit</button>
+      </form>
+
+      <div class="toolbar">
+        <input id="searchInput" type="text" placeholder="Search habits...">
+        <select id="filterSelect">
+          <option value="all">All Habits</option>
+          <option value="pending">Pending Today</option>
+          <option value="completed">Completed Today</option>
+        </select>
+        <select id="sortSelect">
+          <option value="createdAt">Sort: Newest</option>
+          <option value="name">Sort: Name</option>
+          <option value="streak">Sort: Streak</option>
+          <option value="completion">Sort: Completion %</option>
+        </select>
+        <button id="clearAllBtn" class="btn btn-danger" type="button">Clear All</button>
+      </div>
+    </section>
+
+    <section id="habitList" class="habit-list"></section>
+  </div>
+
+  <template id="habitTemplate">
+    <article class="card habit-card">
+      <div class="habit-top">
+        <div class="habit-title-wrap">
+          <span class="habit-dot"></span>
+          <h3 class="habit-title"></h3>
+          <span class="habit-category"></span>
+        </div>
+        <div class="habit-top-actions">
+          <button class="btn btn-small habit-edit" type="button">Edit</button>
+          <button class="btn btn-small btn-danger habit-delete" type="button">Delete</button>
+        </div>
+      </div>
+      <div class="habit-meta">
+        <p>Current Streak: <strong class="habit-streak">0</strong></p>
+        <p>Longest Streak: <strong class="habit-longest">0</strong></p>
+        <p>Weekly Goal: <strong class="habit-frequency">0</strong> days</p>
+        <p>Weekly Progress: <strong class="habit-weekly-progress">0</strong></p>
+        <p>Completion: <strong class="habit-completion">0%</strong></p>
+      </div>
+      <div class="habit-week"></div>
+      <div class="habit-bottom">
+        <button class="btn btn-primary habit-check" type="button">Mark Done Today</button>
+      </div>
+    </article>
+  </template>
+
+  <dialog id="editDialog">
+    <form id="editForm" method="dialog" class="edit-form">
+      <h2>Edit Habit</h2>
+      <input id="editId" type="hidden">
+      <label for="editName">Name</label>
+      <input id="editName" type="text" maxlength="60" required>
+      <label for="editFrequency">Target Days / Week</label>
+      <input id="editFrequency" type="number" min="1" max="7" required>
+      <label for="editCategory">Category</label>
+      <input id="editCategory" type="text" maxlength="20" required>
+      <label for="editColor">Accent Color</label>
+      <input id="editColor" type="color" required>
+      <menu>
+        <button class="btn btn-ghost" value="cancel" type="submit">Cancel</button>
+        <button class="btn btn-primary" value="default" type="submit">Save</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
